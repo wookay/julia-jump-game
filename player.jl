@@ -9,15 +9,15 @@ end
 
 function handle_keys(player::Player)
 	if is_key_pressed(KeyCode.LEFT)
-		player.velocity.x = -maxspeed
+		player.velocity = Vector2f(-maxspeed, player.velocity.y)
 		set_texture(player.sprite, rightplayer_texture)
 		set_scale(player.sprite, Vector2f(-0.25, 0.25))
 	elseif is_key_pressed(KeyCode.RIGHT)
-		player.velocity.x = maxspeed
+		player.velocity = Vector2f(maxspeed, player.velocity.y)
 		set_texture(player.sprite, rightplayer_texture)
 		set_scale(player.sprite, Vector2f(0.25, 0.25))
 	else
-		player.velocity.x = 0
+		player.velocity = Vector2f(0, player.velocity.y)
 		set_texture(player.sprite, middleplayer_texture)
 		set_scale(player.sprite, Vector2f(0.25, 0.25))
 	end
@@ -45,7 +45,7 @@ end
 function collide(player::Player, box::Platform)
 	if intersects(get_globalbounds(player.sprite), get_globalbounds(box.sprite)) && player.velocity.y >= 5
 		box.has_collided = true
-		player.velocity.y = -jump_height
+		player.velocity = Vector2f(player.velocity.x, player.velocity.y - jump_height)
 		set_texture(box.sprite, blue_platform_texture)
 		return true
 	end
